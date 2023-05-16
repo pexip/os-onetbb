@@ -1,0 +1,26 @@
+https://github.com/oneapi-src/oneTBB/issues/776
+
+Index: tbb/src/tbb/tools_api/ittnotify_config.h
+===================================================================
+--- tbb.orig/src/tbb/tools_api/ittnotify_config.h
++++ tbb/src/tbb/tools_api/ittnotify_config.h
+@@ -175,6 +175,10 @@
+ #  define ITT_ARCH_HPPA  9
+ #endif /* ITT_ARCH_HPPA */
+ 
++#ifndef ITT_ARCH_GENERIC
++#  define ITT_ARCH_GENERIC 99
++#endif /* ITT_ARCH_GENERIC */
++
+ #ifndef ITT_ARCH
+ #  if defined _M_IX86 || defined __i386__
+ #    define ITT_ARCH ITT_ARCH_IA32
+@@ -194,6 +198,8 @@
+ #    define ITT_ARCH ITT_ARCH_S390X
+ #  elif defined __hppa__
+ #    define ITT_ARCH ITT_ARCH_HPPA
++#  else
++#    define ITT_ARCH ITT_ARCH_GENERIC
+ #  endif
+ #endif
+ 

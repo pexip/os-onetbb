@@ -1,0 +1,25 @@
+Forward: https://github.com/oneapi-src/oneTBB/pull/789
+Index: tbb/test/tbb/test_collaborative_call_once.cpp
+===================================================================
+--- tbb.orig/test/tbb/test_collaborative_call_once.cpp
++++ tbb/test/tbb/test_collaborative_call_once.cpp
+@@ -216,6 +216,9 @@ TEST_CASE("only calls once - stress test
+     // that makes impossible to create more than ~500 threads.
+     // Android has been added to decrease testing time.
+     constexpr std::size_t N = tbb::detail::d0::max_nfs_size * 2;
++#elif defined(__ILP32__) && defined(__x86_64__)
++       // This is for x32 port https://wiki.debian.org/X32Port
++    constexpr std::size_t N = tbb::detail::d0::max_nfs_size * 2;
+ #else 
+     constexpr std::size_t N = tbb::detail::d0::max_nfs_size * 4;
+ #endif
+@@ -287,6 +290,9 @@ TEST_CASE("handles exceptions - stress t
+     // that makes impossible to create more than ~500 threads.
+     // Android has been added to decrease testing time.
+     constexpr std::size_t N = tbb::detail::d0::max_nfs_size * 2;
++#elif defined(__ILP32__) && defined(__x86_64__)
++       // This is for x32 port https://wiki.debian.org/X32Port
++    constexpr std::size_t N = tbb::detail::d0::max_nfs_size * 2;
+ #else 
+     constexpr std::size_t N = tbb::detail::d0::max_nfs_size * 4;
+ #endif

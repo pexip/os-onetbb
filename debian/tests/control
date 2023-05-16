@@ -1,0 +1,7 @@
+Tests: runtests.sh
+Depends: @, cmake, build-essential
+Restrictions: allow-stderr
+
+Tests: cmaketest.sh
+Depends: @, cmake, build-essential
+Restrictions: allow-stderr

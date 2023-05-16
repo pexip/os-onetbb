@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.15)
+project(CXX)
+find_package(TBB)
+
+message("                TBB_FOUND: ${TBB_FOUND}")
+message("              TBB_VERSION: ${TBB_VERSION}")
+message("    TBB_INTERFACE_VERSION: ${TBB_INTERFACE_VERSION}")
+message("            TBB_tbb_FOUND: ${TBB_tbb_FOUND}")
+message("      TBB_tbbmalloc_FOUND: ${TBB_tbbmalloc_FOUND}")
+message("TBB_tbbmalloc_proxy_FOUND: ${TBB_tbbmalloc_proxy_FOUND}")
+message("     TBB_IMPORTED_TARGETS: ${TBB_IMPORTED_TARGETS}")
+
+add_executable(testcc "${CMAKE_CURRENT_SOURCE_DIR}/test.cc")
+target_link_libraries(testcc TBB::tbb)
+enable_testing()
+add_test(NAME testcc COMMAND testcc)

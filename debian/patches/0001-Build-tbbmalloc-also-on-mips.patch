@@ -1,0 +1,43 @@
+From 96efebb5ac83d7ddefa60786e8a21510446863ef Mon Sep 17 00:00:00 2001
+From: Adrian Bunk <bunk@debian.org>
+Date: Wed, 15 Jun 2022 11:16:35 +0300
+Subject: Build tbbmalloc also on mips
+
+Signed-off-by: Adrian Bunk <bunk@debian.org>
+---
+ CMakeLists.txt | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
+
+Index: tbb/CMakeLists.txt
+===================================================================
+--- tbb.orig/CMakeLists.txt
++++ tbb/CMakeLists.txt
+@@ -216,19 +216,17 @@ else()
+     if (TBB_BUILD)
+         add_subdirectory(src/tbb)
+     endif()
+-    if (NOT "${CMAKE_SYSTEM_PROCESSOR}" MATCHES "mips")
+-        if (TBBMALLOC_BUILD)
+-            add_subdirectory(src/tbbmalloc)
+-            if(TBBMALLOC_PROXY_BUILD AND NOT "${MSVC_CXX_ARCHITECTURE_ID}" MATCHES "ARM64")
+-                add_subdirectory(src/tbbmalloc_proxy)
+-            endif()
+-        endif()
+-        if (APPLE OR NOT BUILD_SHARED_LIBS)
+-            message(STATUS "TBBBind build targets are disabled due to unsupported environment")
+-        else()
+-            add_subdirectory(src/tbbbind)
++    if (TBBMALLOC_BUILD)
++        add_subdirectory(src/tbbmalloc)
++        if(TBBMALLOC_PROXY_BUILD AND NOT "${MSVC_CXX_ARCHITECTURE_ID}" MATCHES "ARM64")
++            add_subdirectory(src/tbbmalloc_proxy)
+         endif()
+     endif()
++    if (APPLE OR NOT BUILD_SHARED_LIBS)
++        message(STATUS "TBBBind build targets are disabled due to unsupported environment")
++    else()
++        add_subdirectory(src/tbbbind)
++    endif()
+ 
+     # -------------------------------------------------------------------
+     # Installation instructions

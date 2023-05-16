@@ -1,0 +1,71 @@
+#!/usr/bin/make -f
+# export DH_VERBOSE=1
+export DEB_BUILD_MAINT_OPTIONS   = hardening=+all
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/buildflags.mk
+include /usr/share/dpkg/architecture.mk
+
+ifneq (,$(filter $(DEB_BUILD_ARCH), m68k sh4))
+BUILD_FLAGS := -DCMAKE_CXX_FLAGS="$(CXXFLAGS) $(CPPFLAGS) -faligned-new"
+else
+BUILD_FLAGS := -DCMAKE_CXX_FLAGS="$(CXXFLAGS) $(CPPFLAGS)"
+endif
+
+ifneq ($(DEB_HOST_ARCH),$(DEB_BUILD_ARCH))
+# Provide compiler information
+BUILD_FLAGS += -DCMAKE_C_COMPILER=$(DEB_HOST_GNU_TYPE)-gcc
+BUILD_FLAGS += -DCMAKE_CXX_COMPILER=$(DEB_HOST_GNU_TYPE)-g++
+endif
+
+# explicitly link against libatomic
+ifneq (,$(filter $(DEB_HOST_ARCH),armel mipsel m68k sh4 powerpc))
+export DEB_LDFLAGS_MAINT_APPEND = -Wl,--no-as-needed -latomic -Wl,--as-needed
+endif
+
+
+%:
+	dh $@ -Scmake+ninja
+
+# Common CMake Flags, see upstream documentation
+# https://github.com/oneapi-src/oneTBB/blob/master/cmake/README.md
+override_dh_auto_configure:
+ifeq (ia64,$(DEB_HOST_ARCH))
+	# https://github.com/oneapi-src/oneTBB/issues/777
+	# This is a quick hack to disable ITT_NOTIFY on IA64
+	sed -i -e 's/__TBB_USE_ITT_NOTIFY/__TBB_NO_USE_ITT_NOTIFY/g' src/tbb/CMakeLists.txt
+endif
+	dh_auto_configure -- \
+		-DTBB_TEST=ON \
+		-DTBB4PY_BUILD=OFF \
+		$(BUILD_FLAGS)
+
+override_dh_auto_build-arch:
+# dump out diagnostics
+	cat /proc/cpuinfo
+	gcc -dM -E - < /dev/null
+	echo Build system page size is $$(($$(getconf PAGESIZE) >> 10)) KiB
+	dh_auto_build
+
+override_dh_auto_build-indep:
+	sphinx-build -b html doc/main html
+	# strip the links to prevent privacy breach
+	-find html -type f -exec sed -i -e \
+		's@https://www.intel.com/content/dam/www/global/wap/performance-config.js@https://localhost/performance-config.js@g' '{}' \;
+	# don't ship embedded fonts
+	-$(RM) -rf html/_static/vendor
+	# remove .doctree junk
+	-$(RM) -rf html/.doctrees
+	# remove pycache
+	-$(RM) -rf html/_static/__pycache__
+	# remove embedded javascripts. they will be provided by other system packages (see .links)
+	-$(RM) html/_static/*.js
+
+override_dh_auto_test-indep:
+	:
+
+override_dh_auto_install-indep:
+	:
+
+# Makefiles should not be compressed (tbb-examples)
+override_dh_compress-indep:
+	dh_compress -X*/examples/*

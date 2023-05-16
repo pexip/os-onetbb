@@ -1,0 +1,14 @@
+Description: https://github.com/oneapi-src/oneTBB/issues/823
+Index: tbb/cmake/compilers/GNU.cmake
+===================================================================
+--- tbb.orig/cmake/compilers/GNU.cmake
++++ tbb/cmake/compilers/GNU.cmake
+@@ -26,7 +26,7 @@ else()
+     set(TBB_DEF_FILE_PREFIX lin${TBB_ARCH})
+ endif()
+ 
+-set(TBB_WARNING_LEVEL -Wall -Wextra $<$<BOOL:${TBB_STRICT}>:-Werror> -Wfatal-errors)
++set(TBB_WARNING_LEVEL -Wall -Wextra $<$<BOOL:${TBB_STRICT}>:-Werror> -Wfatal-errors -Wno-error=uninitialized -Wno-error=array-bounds -Wno-error=use-after-free -Wno-error=address)
+ set(TBB_TEST_WARNING_FLAGS -Wshadow -Wcast-qual -Woverloaded-virtual -Wnon-virtual-dtor)
+ 
+ # Depfile options (e.g. -MD) are inserted automatically in some cases.

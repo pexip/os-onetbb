@@ -1,0 +1,19 @@
+iDescription: Remove unaligned mem-accesses from test_malloc_pools.cpp
+Index: tbb/test/tbbmalloc/test_malloc_pools.cpp
+===================================================================
+--- tbb.orig/test/tbbmalloc/test_malloc_pools.cpp
++++ tbb/test/tbbmalloc/test_malloc_pools.cpp
+@@ -66,11 +66,11 @@ static std::atomic<int> liveRegions;
+ 
+ static void *getMallocMem(intptr_t /*pool_id*/, size_t &bytes)
+ {
+-    void *rawPtr = malloc(bytes+sizeof(MallocPoolHeader)+1);
++    void *rawPtr = malloc(bytes+sizeof(MallocPoolHeader));
+     if (!rawPtr)
+         return nullptr;
+     // +1 to check working with unaligned space
+-    void *ret = (void *)((uintptr_t)rawPtr+sizeof(MallocPoolHeader)+1);
++    void *ret = (void *)((uintptr_t)rawPtr+sizeof(MallocPoolHeader));
+ 
+     MallocPoolHeader *hdr = (MallocPoolHeader*)ret-1;
+     hdr->rawPtr = rawPtr;
