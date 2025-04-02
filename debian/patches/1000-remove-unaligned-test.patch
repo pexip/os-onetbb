@@ -1,0 +1,25 @@
+Description: Remove unaligned mem-accesses from test_malloc_pools.cpp
+ This should help sparc64 tests, if we miss a case a SIGBUS
+ will greet us.
+Author: Steve Capper <steven.capper@gmail.com>
+Last-Changed: 2017-08-13
+Forwarded: no
+
+Index: onetbb/test/tbbmalloc/test_malloc_pools.cpp
+===================================================================
+--- onetbb.orig/test/tbbmalloc/test_malloc_pools.cpp
++++ onetbb/test/tbbmalloc/test_malloc_pools.cpp
+@@ -66,11 +66,11 @@ static std::atomic<int> liveRegions;
+ 
+ static void *getMallocMem(intptr_t /*pool_id*/, size_t &bytes)
+ {
+-    void *rawPtr = malloc(bytes+sizeof(MallocPoolHeader)+1);
++    void *rawPtr = malloc(bytes+sizeof(MallocPoolHeader));
+     if (!rawPtr)
+         return nullptr;
+     // +1 to check working with unaligned space
+-    void *ret = (void *)((uintptr_t)rawPtr+sizeof(MallocPoolHeader)+1);
++    void *ret = (void *)((uintptr_t)rawPtr+sizeof(MallocPoolHeader));
+ 
+     MallocPoolHeader *hdr = (MallocPoolHeader*)ret-1;
+     hdr->rawPtr = rawPtr;

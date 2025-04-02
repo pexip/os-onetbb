@@ -1,0 +1,44 @@
+Description: sh4 support
+ onetbb currently FTBFS on sh4 because the source code assumes that the target
+ FPU supports all four rounding modes (FE_TONEAREST, FE_DOWNWARD, FE_UPWARD and
+ FE_TOWARDZERO) which is not the case on sh4 which supports FE_TONEAREST and
+ FE_TOWARDZERO only [1].
+ .
+ The attached patch fixes these assumptions for sh4 and makes the code build. I
+ have already patched and uploaded the package to the unreleased distribution
+ so that the mold linker can build on sh4 as well.
+ .
+ I will forward the patch later after reformating it.
+Author: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Forwarded: not yet.
+BTS: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1027168
+Index: onetbb/test/common/fp_control.h
+===================================================================
+--- onetbb.orig/test/common/fp_control.h
++++ onetbb/test/common/fp_control.h
+@@ -112,7 +112,11 @@ inline void SetRoundingMode ( int mode )
+ 
+ #include <fenv.h>
+ 
++#if defined(__sh__)
++const int RND_MODE_MASK = FE_TONEAREST | FE_TOWARDZERO;
++#else
+ const int RND_MODE_MASK = FE_TONEAREST | FE_DOWNWARD | FE_UPWARD | FE_TOWARDZERO;
++#endif
+ 
+ const int NumSseModes = 1;
+ const int SseModes[NumSseModes] = { 0 };
+@@ -125,8 +129,13 @@ inline void SetSseMode ( int ) {}
+ 
+ #endif /* Other archs */
+ 
++#if defined(__sh__)
++const int NumRoundingModes = 2;
++const int RoundingModes[NumRoundingModes] = { FE_TONEAREST, FE_TOWARDZERO };
++#else
+ const int NumRoundingModes = 4;
+ const int RoundingModes[NumRoundingModes] = { FE_TONEAREST, FE_DOWNWARD, FE_UPWARD, FE_TOWARDZERO };
++#endif
+ const int numFPModes = NumRoundingModes*NumSseModes;
+ 
+ inline void SetFPMode( int mode ) {
