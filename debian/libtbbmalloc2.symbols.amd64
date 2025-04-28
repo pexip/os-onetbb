@@ -1,5 +1,5 @@
 libtbbmalloc.so.2 libtbbmalloc2 #MINVER#
- MallocInitializeITT@Base 2017~U7
+ (optional) MallocInitializeITT@Base 2017~U7
  (optional)_Z9parseFileILi100ELi1EEvPKcRAT0__K13parseFileItem@Base 2018~U6
  (optional)_Z9parseFileILi100ELi2EEvPKcRAT0__K13parseFileItem@Base 2018~U6
  (optional)_ZN11MallocMutex11scoped_lockD1Ev@Base 2020.3

@@ -1,0 +1,29 @@
+Description: Reduce stress of test_collaborative_call_once on __arm__.
+Author: Mo Zhou <lumin@debian.org>
+Last-Update: 2022-02-15
+Forwarded: https://github.com/oneapi-src/oneTBB/pull/789
+
+Index: onetbb/test/tbb/test_collaborative_call_once.cpp
+===================================================================
+--- onetbb.orig/test/tbb/test_collaborative_call_once.cpp
++++ onetbb/test/tbb/test_collaborative_call_once.cpp
+@@ -217,6 +217,9 @@ TEST_CASE("only calls once - stress test
+     // that makes impossible to create more than ~500 threads.
+     // Android has been added to decrease testing time.
+     constexpr std::size_t N = tbb::detail::d0::max_nfs_size * 2;
++#elif defined(__ILP32__) && defined(__x86_64__)
++    // This is for x32 port https://wiki.debian.org/X32Port
++    constexpr std::size_t N = tbb::detail::d0::max_nfs_size * 2;
+ #elif __TBB_USE_THREAD_SANITIZER
+     // Reduce execution time under Thread Sanitizer
+     constexpr std::size_t N = tbb::detail::d0::max_nfs_size + 64;
+@@ -291,6 +294,9 @@ TEST_CASE("handles exceptions - stress t
+     // that makes impossible to create more than ~500 threads.
+     // Android has been added to decrease testing time.
+     constexpr std::size_t N = tbb::detail::d0::max_nfs_size * 2;
++#elif defined(__ILP32__) && defined(__x86_64__)
++    // This is for x32 port https://wiki.debian.org/X32Port
++    constexpr std::size_t N = tbb::detail::d0::max_nfs_size * 2;
+ #else 
+     constexpr std::size_t N = tbb::detail::d0::max_nfs_size * 4;
+ #endif

@@ -1,3 +1,140 @@
+onetbb (2022.1.0-1) unstable; urgency=medium
+
+  * Team upload (Closes: #1101729)
+  * Drop unnecessary CI config
+
+ -- Bastian Germann <bage@debian.org>  Wed, 02 Apr 2025 20:52:06 +0200
+
+onetbb (2022.1.0-1~exp1) unstable; urgency=medium
+
+  * New upstream version 2022.1.0
+  * Refresh existing patches.
+  * Add missing sphinx-design package and fix sphinx doc build.
+  * Refresh symbols control file.
+
+ -- Mo Zhou <lumin@debian.org>  Sat, 29 Mar 2025 16:49:33 -0400
+
+onetbb (2022.0.0-2) unstable; urgency=medium
+
+  * d/rules: Clean the html directory as well. (Closes: #1045631)
+  * d/control: Update the homepage URL.
+  * Bump Standards-Version to 4.7.0 (no change needed).
+  * Apply wrap-and-sort.
+
+ -- Mo Zhou <lumin@debian.org>  Sat, 22 Feb 2025 13:51:55 -0500
+
+onetbb (2022.0.0-1) unstable; urgency=medium
+
+  * Patch sphinx config file to fix the build (Closes: #1091039)
+  * Skip test_resumable_tasks to avoid FTBFS on s390x.
+  * Upload to unstable.
+
+ -- Mo Zhou <lumin@debian.org>  Wed, 01 Jan 2025 20:29:54 -0500
+
+onetbb (2022.0.0-1~exp1) experimental; urgency=medium
+
+  * New upstream version 2022.0.0
+  * Refresh symbols control file.
+
+ -- Mo Zhou <lumin@debian.org>  Sat, 23 Nov 2024 20:45:19 -0500
+
+onetbb (2021.13.0-1~exp1) experimental; urgency=medium
+
+  * New upstream version 2021.13.0
+  * Refresh existing patches.
+  * Switch from sphinx book theme to rtd theme due to pydata-sphinx-theme
+    (0.15.4+dfsg-1) being temporarily buggy where it missed necessary files.
+  * Remove unsupported C/CXXFLAGS for alpha and hppa architectures.
+  * Upload to experimental.
+
+ -- Mo Zhou <lumin@debian.org>  Thu, 17 Oct 2024 23:50:27 -0400
+
+onetbb (2021.12.0-1) unstable; urgency=medium
+
+  [ zhangdandan ]
+  * Fix testcases failed on loong64 (Closes: #1070849)
+
+  [ Mo Zhou ]
+  * Upload to unstable.
+
+ -- Mo Zhou <lumin@debian.org>  Fri, 12 Jul 2024 01:16:04 -0400
+
+onetbb (2021.12.0-1~exp1) experimental; urgency=medium
+
+  [ Gianfranco Costamagna ] (Ubuntu changes)
+  * Fix build on ppc64el by using -Wno-error=stringop-overflow.
+  * Make sure FORTIFY_SOURCE=3 is used, to fix FTBFS due to mixing
+    different values of them
+
+  [ John Paul Adrian Glaubitz ]
+  * Add sh4 architecture support.
+
+  [ Mo Zhou ]
+  * New upstream version 2021.12.0
+  * Quilt refresh patches.
+  * B-D on pkgconf instead of pkg-config.
+  * ubuntu fortify patch is not necessary here on debian
+  * Upload to experimental.
+
+ -- Mo Zhou <lumin@debian.org>  Thu, 25 Apr 2024 14:19:08 -0400
+
+onetbb (2021.11.0-2) unstable; urgency=medium
+
+  * Autopkgtest: reduce testing workload to avoid timeout on weak CPUs.
+
+ -- Mo Zhou <lumin@debian.org>  Tue, 26 Dec 2023 14:26:37 -0500
+
+onetbb (2021.11.0-1) unstable; urgency=medium
+
+  * Upload to unstable.
+
+ -- Mo Zhou <lumin@debian.org>  Sat, 09 Dec 2023 16:46:42 -0500
+
+onetbb (2021.11.0-1~exp1) experimental; urgency=medium
+
+  * New upstream version 2021.11.0
+  * Release to experimental.
+
+ -- Mo Zhou <lumin@debian.org>  Fri, 24 Nov 2023 00:13:46 -0500
+
+onetbb (2021.10.0-1) experimental; urgency=medium
+
+  * New upstream version 2021.10.0 (July 2023)
+  * Quilt refresh patchset.
+  * Remove 1040-missing-header.patch, fixed upstream.
+  * Upload to experimental.
+
+ -- Mo Zhou <lumin@debian.org>  Sun, 12 Nov 2023 16:00:41 -0500
+
+onetbb (2021.9.0-3) UNRELEASED; urgency=medium
+
+  [ Petter Reinholdtsen ]
+  * Team upload.
+
+  * Updated Standards-Version from 4.6.0 to 4.6.2.
+  * Document that 1040-missing-header.patch is applied upstream.
+
+ -- Mo Zhou <lumin@debian.org>  Sun, 12 Nov 2023 15:16:18 -0500
+
+onetbb (2021.9.0-2) unstable; urgency=medium
+
+  * Team upload.
+
+  * Added patch classiciation and added more metadata.
+  * Avoid build problem on armel caused by strange compiler
+    (Closes: #1042009).
+
+ -- Petter Reinholdtsen <pere@debian.org>  Wed, 02 Aug 2023 22:42:54 +0200
+
+onetbb (2021.9.0-1) unstable; urgency=medium
+
+  * New upstream version 2021.9.0
+  * Remove merged patches.
+  * Remove merged patches. Rebase remaining ones.
+  * Add patch for missing header to resolve FTBFS. (Closes: #1037798)
+
+ -- Mo Zhou <lumin@debian.org>  Thu, 13 Jul 2023 21:29:44 -0700
+
 onetbb (2021.8.0-2+pexip24u6) pexip-bookworm; urgency=medium
 
   * New versioning scheme

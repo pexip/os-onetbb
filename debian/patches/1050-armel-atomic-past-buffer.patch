@@ -1,0 +1,44 @@
+Description: Avoid build problem on armel caused by strange compiler.
+ Add indirection and a result test which seem to confuse GCC 13 less
+ than the original statements.
+
+ Fixes build problem:
+   In file included from /usr/include/c++/13/atomic:41,
+                    from /<<PKGBUILDDIR>>/test/common/doctest.h:2990,
+                    from /<<PKGBUILDDIR>>/test/common/test.h:32,
+                    from /<<PKGBUILDDIR>>/test/tbb/test_concurrent_monitor.cpp:26:
+   In member function ‘void std::__atomic_base<_IntTp>::store(__int_type, std::memory_order) [with _ITp = bool]’,
+       inlined from ‘void std::atomic<bool>::store(bool, std::memory_order)’ at /usr/include/c++/13/atomic:104:20,
+       inlined from ‘void tbb::detail::r1::concurrent_monitor_base<Context>::notify_one_relaxed() [with Context = unsigned int]’ at /<<PKGBUILDDIR>>/test/tbb/../../src/tbb/concurrent_monitor.h:293:53,
+       inlined from ‘void tbb::detail::r1::concurrent_monitor_base<Context>::notify_one() [with Context = unsigned int]’ at /<<PKGBUILDDIR>>/test/tbb/../../src/tbb/concurrent_monitor.h:276:27,
+       inlined from ‘void DOCTEST_ANON_FUNC_35()’ at /<<PKGBUILDDIR>>/test/tbb/test_concurrent_monitor.cpp:87:44:
+   /usr/include/c++/13/bits/atomic_base.h:481:25: error: ‘void __atomic_store_1(volatile void*, unsigned char, int)’ writing 1 byte into a region of size 0 overflows the destination [-Werror=stringop-overflow=]
+     481 |         __atomic_store_n(&_M_i, __i, int(__m));
+         |         ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+
+Author: Petter Reinholdtsen <pere@debian.org>
+Forwarded: no
+Bug-Debian: https://bugs.debian.org/1042009
+Last-Update: 2023-07-31
+
+Index: onetbb/src/tbb/concurrent_monitor.h
+===================================================================
+--- onetbb.orig/src/tbb/concurrent_monitor.h
++++ onetbb/src/tbb/concurrent_monitor.h
+@@ -290,7 +290,15 @@ public:
+             n = my_waitset.front();
+             if (n != end) {
+                 my_waitset.remove(*n);
+-                to_wait_node(n)->my_is_in_list.store(false, std::memory_order_relaxed);
++                wait_node<Context>* wn = to_wait_node(n);
++                // Artificial 'if' test to work around confused armel
++                // gcc 13 compiler, see
++                // <URL: https://bugs.debian.org/1042009 >.
++                if (wn) {
++                    wn->my_is_in_list.store(false, std::memory_order_relaxed);
++                } else {
++                    __TBB_ASSERT(wn, "to_wait_node(n) is NULL");
++                }
+             }
+         }
+ 

@@ -1,25 +1,25 @@
 Source: onetbb
 Maintainer: Pexip AS <packaging@pexip.com>
 XSBC-Pexip-Original-Maintainer: Debian Science Maintainers <debian-science-maintainers@lists.alioth.debian.org>
-XSBC-Pexip-Original-Uploaders: Steve Capper <steven.capper@gmail.com>,
-           Mo Zhou <lumin@debian.org>
+XSBC-Pexip-Original-Uploaders: Steve Capper <steven.capper@gmail.com>, Mo Zhou <lumin@debian.org>
 Section: libs
 Priority: optional
 Build-Depends: debhelper-compat (= 13),
+               cmake,
+               gdb,
+               libhwloc-dev,
                libjs-jquery <!nodoc>,
                libjs-underscore <!nodoc>,
-               pkg-config,
-               libhwloc-dev,
-               gdb,
-               cmake,
                ninja-build,
+               pkgconf,
                python3-sphinx <!nodoc>,
-               python3-sphinx-book-theme <!nodoc>,
-Build-Depends-Indep: doxygen, graphviz,
-Standards-Version: 4.6.0
+               python3-sphinx-rtd-theme <!nodoc>,
+               python3-sphinx-design <!nodoc>,
+Build-Depends-Indep: doxygen, graphviz
+Standards-Version: 4.7.0
 Vcs-Browser: https://salsa.debian.org/science-team/tbb
 Vcs-Git: https://salsa.debian.org/science-team/tbb.git
-Homepage: https://www.threadingbuildingblocks.org/
+Homepage: https://uxlfoundation.github.io/oneTBB/
 Rules-Requires-Root: no
 XS-Pexip-Upstream: http://deb.debian.org/debian/ trixie
 
@@ -27,8 +27,7 @@ Package: libtbb-dev
 Architecture: linux-any
 Multi-Arch: same
 Section: libdevel
-Depends: libtbb12 (= ${binary:Version}),
-         ${misc:Depends}
+Depends: libtbb12 (= ${binary:Version}), ${misc:Depends}
 Suggests: libtbb-doc
 Description: parallelism library for C++ - development files
  TBB is a library that helps you leverage multi-core processor
@@ -45,13 +44,12 @@ Description: parallelism library for C++ - development files
 Package: libtbb12
 Architecture: linux-any
 Multi-Arch: same
-Depends: libtbbmalloc2 (= ${binary:Version}),
-         libtbbbind-2-5 (= ${binary:Version}),
-         ${shlibs:Depends},
-         ${misc:Depends}
+Depends: libtbbbind-2-5 (= ${binary:Version}),
+         libtbbmalloc2 (= ${binary:Version}),
+         ${misc:Depends},
+         ${shlibs:Depends}
 Pre-Depends: ${misc:Pre-Depends}
-Breaks:
- libtbb2 (<< 2021),
+Breaks: libtbb2 (<< 2021)
 Description: parallelism library for C++ - runtime files
  TBB is a library that helps you leverage multi-core processor
  performance without having to be a threading expert. It represents a
@@ -67,11 +65,10 @@ Description: parallelism library for C++ - runtime files
 Package: libtbbmalloc2
 Architecture: linux-any
 Multi-Arch: same
-Depends: ${shlibs:Depends},
-         ${misc:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
 Pre-Depends: ${misc:Pre-Depends}
-Breaks: libtbb2 (<< 2020.3-1ubuntu2), libtbb12 (<< 2021.5-7ubuntu2)
-Replaces: libtbb2 (<< 2020.3-1ubuntu2), libtbb12 (<< 2021.5-7ubuntu2)
+Breaks: libtbb12 (<< 2021.5-7ubuntu2), libtbb2 (<< 2020.3-1ubuntu2)
+Replaces: libtbb12 (<< 2021.5-7ubuntu2), libtbb2 (<< 2020.3-1ubuntu2)
 Description: parallelism helper library for C++ - runtime files
  TBB is a library that helps you leverage multi-core processor
  performance without having to be a threading expert. It represents a
@@ -87,8 +84,7 @@ Description: parallelism helper library for C++ - runtime files
 Package: libtbbbind-2-5
 Architecture: linux-any
 Multi-Arch: same
-Depends: ${shlibs:Depends},
-         ${misc:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
 Pre-Depends: ${misc:Pre-Depends}
 Description: parallelism library for C++ - runtime files
  TBB is a library that helps you leverage multi-core processor
@@ -106,11 +102,10 @@ Package: libtbb-doc
 Architecture: all
 Multi-Arch: foreign
 Section: doc
-Breaks: tbb-examples (<< 2020.0-2),
-Replaces: tbb-examples (<< 2020.0-2),
-Depends: ${misc:Depends},
-         libjs-jquery
-Recommends: libtbb-dev,
+Breaks: tbb-examples (<< 2020.0-2)
+Replaces: tbb-examples (<< 2020.0-2)
+Depends: libjs-jquery, ${misc:Depends}
+Recommends: libtbb-dev
 Description: parallelism library for C++ - documentation
  TBB is a library that helps you leverage multi-core processor
  performance without having to be a threading expert. It represents a

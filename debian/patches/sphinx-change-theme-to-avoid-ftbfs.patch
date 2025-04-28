@@ -1,0 +1,13 @@
+Index: onetbb/doc/conf.py
+===================================================================
+--- onetbb.orig/doc/conf.py
++++ onetbb/doc/conf.py
+@@ -122,7 +122,7 @@ else:
+ # documentation.
+ #
+ 
+-html_theme = 'sphinx_book_theme'
++html_theme = 'sphinx_rtd_theme'
+ 
+ if BUILD_TYPE == 'dita':
+     html_theme_options = {
