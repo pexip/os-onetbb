@@ -1,3 +1,11 @@
+onetbb (2022.1.0-1+deb13u1) trixie; urgency=medium
+
+  * Team upload.
+  * Skip some tests when the machine has a single CPU. Closes: #1108053.
+  * Skip test_mutex, it fails in Salsa CI. Closes: #1094260.
+
+ -- Santiago Vila <sanvila@debian.org>  Sun, 28 Sep 2025 18:50:00 +0200
+
 onetbb (2022.1.0-1) unstable; urgency=medium
 
   * Team upload (Closes: #1101729)

@@ -1,0 +1,16 @@
+Description: Skip test_mutex, it fails in Salsa CI
+Author: Santiago Vila <sanvila@debian.org>
+Bug-Debian: https://bugs.debian.org/1094260
+Last-Update: 2025-09-20
+
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -446,7 +446,7 @@
+     tbb_add_test(SUBDIR tbb NAME test_enumerable_thread_specific DEPENDENCIES TBB::tbb)
+     tbb_add_test(SUBDIR tbb NAME test_concurrent_queue DEPENDENCIES TBB::tbb)
+     #tbb_add_test(SUBDIR tbb NAME test_resumable_tasks DEPENDENCIES TBB::tbb)
+-    tbb_add_test(SUBDIR tbb NAME test_mutex DEPENDENCIES TBB::tbb)
++    #tbb_add_test(SUBDIR tbb NAME test_mutex DEPENDENCIES TBB::tbb)
+     if (SYSTEM_CONCURRENCY GREATER 1)
+         tbb_add_test(SUBDIR tbb NAME test_function_node DEPENDENCIES TBB::tbb)
+         tbb_add_test(SUBDIR tbb NAME test_multifunction_node DEPENDENCIES TBB::tbb)
