@@ -7,3 +7,5 @@
 sh4-support.patch
 sphinx-change-theme-to-avoid-ftbfs.patch
 skip-resumable-tasks.patch
+single-cpu.patch
+skip-test-mutex.patch
