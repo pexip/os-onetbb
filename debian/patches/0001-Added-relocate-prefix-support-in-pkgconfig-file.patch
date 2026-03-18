@@ -1,0 +1,39 @@
+From 26bb52bc4f9aae18b212294b1ccc522eeeb53aab Mon Sep 17 00:00:00 2001
+From: Tulio Beloqui <tulio@pexip.com>
+Date: Wed, 18 Mar 2026 16:53:10 +0100
+Subject: [PATCH] Added relocate prefix support in pkgconfig file
+
+---
+ src/tbb/CMakeLists.txt | 16 +++-------------
+ 1 file changed, 3 insertions(+), 13 deletions(-)
+
+diff --git a/src/tbb/CMakeLists.txt b/src/tbb/CMakeLists.txt
+index bff2a4f..f79f48d 100644
+--- a/src/tbb/CMakeLists.txt
++++ b/src/tbb/CMakeLists.txt
+@@ -155,19 +155,9 @@ else()
+     set(TBB_PC_NAME tbb32)
+ endif()
+ 
+-set(_prefix_for_pc_file "${CMAKE_INSTALL_PREFIX}")
+-
+-if (IS_ABSOLUTE "${CMAKE_INSTALL_LIBDIR}")
+-    set(_libdir_for_pc_file "${CMAKE_INSTALL_LIBDIR}")
+-else()
+-    set(_libdir_for_pc_file "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
+-endif()
+-
+-if (IS_ABSOLUTE "${CMAKE_INSTALL_INCLUDEDIR}")
+-    set(_includedir_for_pc_file "${CMAKE_INSTALL_INCLUDEDIR}")
+-else()
+-    set(_includedir_for_pc_file "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
+-endif()
++set(_prefix_for_pc_file "\${pcfiledir}/../../")
++set(_libdir_for_pc_file "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
++set(_includedir_for_pc_file "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
+ 
+ configure_file(${PROJECT_SOURCE_DIR}/integration/pkg-config/tbb.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${TBB_PC_NAME}.pc @ONLY)
+ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${TBB_PC_NAME}.pc
+-- 
+2.43.0
+
