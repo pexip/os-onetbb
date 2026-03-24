@@ -32,7 +32,7 @@ jobs:
     if: github.repository == 'uxlfoundation/oneTBB'
     runs-on: [ubuntu-latest]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Download Linux 64 Coverity Tool
         run: |
           curl https://scan.coverity.com/download/cxx/linux64 --output ${GITHUB_WORKSPACE}/cov-linux64-tool.tar.gz \
