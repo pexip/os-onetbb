@@ -1,0 +1,62 @@
+From c6bf1c998a4c60a0410824ccde4d3ea1c351fa43 Mon Sep 17 00:00:00 2001
+From: "Tulio Beloqui" <tulio@pexip.com>
+Date: Wed, 22 Jul 2026 11:58:56 +0000
+Subject: [PATCH] Fix Windows pkgconfig debug library name
+
+---
+ cmake/config_generation.cmake |  2 +-
+ src/tbb/CMakeLists.txt        | 25 +++++++++++++++++++++----
+ 2 files changed, 22 insertions(+), 5 deletions(-)
+
+diff --git a/cmake/config_generation.cmake b/cmake/config_generation.cmake
+index e4ef7bc..bd6ff01 100644
+--- a/cmake/config_generation.cmake
++++ b/cmake/config_generation.cmake
+@@ -116,7 +116,7 @@ if (WINDOWS_STORE)
+     set(_tbb_subdir \${_tbb_subdir}_uwp)
+ endif()
+ ")
+-            set(_tbb_pc_lib_name ${_tbb_pc_lib_name}${TBB_BINARY_VERSION})
++            set(_tbb_pc_lib_name ${_tbb_pc_lib_name}${tbb_gen_cfg_TBB_BINARY_VERSION})
+ 
+             set(_libdir_for_pc_file "\${prefix}/lib/intel64/vc14")
+             set(_tbb_pc_extra_libdir "-L\${prefix}/lib")
+diff --git a/src/tbb/CMakeLists.txt b/src/tbb/CMakeLists.txt
+index 8c84a0b..6c2401e 100644
+--- a/src/tbb/CMakeLists.txt
++++ b/src/tbb/CMakeLists.txt
+@@ -210,10 +210,27 @@ if (TBB_INSTALL)
+         set(_includedir_for_pc_file "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
+     endif()
+ 
+-    configure_file(${PROJECT_SOURCE_DIR}/integration/pkg-config/tbb.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${TBB_PC_NAME}.pc @ONLY)
+-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${TBB_PC_NAME}.pc
+-            DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig/
+-            COMPONENT devel)
++    if (WIN32)
++        # Generate release and debug variants, then install the correct one as tbb.pc
++        configure_file(${PROJECT_SOURCE_DIR}/integration/pkg-config/tbb.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${TBB_PC_NAME}_release.pc @ONLY)
++        set(_tbb_pc_lib_name ${_tbb_pc_lib_name}_debug)
++        configure_file(${PROJECT_SOURCE_DIR}/integration/pkg-config/tbb.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${TBB_PC_NAME}_debug.pc @ONLY)
++        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${TBB_PC_NAME}_release.pc
++                DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig/
++                CONFIGURATIONS Release RelWithDebInfo MinSizeRel
++                RENAME ${TBB_PC_NAME}.pc
++                COMPONENT devel)
++        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${TBB_PC_NAME}_debug.pc
++                DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig/
++                CONFIGURATIONS Debug
++                RENAME ${TBB_PC_NAME}.pc
++                COMPONENT devel)
++    else()
++        configure_file(${PROJECT_SOURCE_DIR}/integration/pkg-config/tbb.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${TBB_PC_NAME}.pc @ONLY)
++        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${TBB_PC_NAME}.pc
++                DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig/
++                COMPONENT devel)
++    endif()
+ endif()
+ 
+ if (COMMAND tbb_gen_vars)
+-- 
+2.53.0
+
